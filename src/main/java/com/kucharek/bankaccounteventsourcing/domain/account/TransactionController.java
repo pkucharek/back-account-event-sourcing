@@ -14,8 +14,11 @@ class TransactionController {
     }
 
     @PostMapping
-    ResponseEntity<Void> addTransaction(NewTransactionDTO newTransactionDTO) {
-        transactionService.performTransaction(newTransactionDTO);
+    ResponseEntity<Object> addTransaction(NewTransactionDTO newTransactionDTO) {
+        return transactionService
+                .performTransaction(newTransactionDTO)
+                .map(result -> ResponseEntity.ok().build())
+                .getOrElseGet(error -> ResponseEntity.badRequest().body(error.toString()));
     }
 
 }

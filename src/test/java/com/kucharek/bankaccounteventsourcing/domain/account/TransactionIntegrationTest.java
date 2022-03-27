@@ -13,7 +13,11 @@ public class TransactionIntegrationTest {
     @Test
     void creates_transaction() {
         //given
-        NewTransactionDTO newTransactionDTO = new NewTransactionDTO(1, 2, 123);
+        NewTransactionDTO newTransactionDTO = new NewTransactionDTO(
+                new AccountHolderId(1),
+                new AccountHolderId(2),
+                123
+        );
 
         //when, then
             with().body(newTransactionDTO)
