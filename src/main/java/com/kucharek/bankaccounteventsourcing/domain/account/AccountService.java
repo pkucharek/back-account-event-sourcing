@@ -1,11 +1,9 @@
 package com.kucharek.bankaccounteventsourcing.domain.account;
 
+import io.vavr.Tuple;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
-import io.vavr.collection.Stream;
 import io.vavr.control.Option;
-
-import java.util.Objects;
 
 class AccountService {
 
@@ -26,6 +24,6 @@ class AccountService {
     }
 
     void saveEvents(List<AccountHolderEvent> events) {
-
+        events.forEach(event -> accountHoldersEventStore.put(Tuple.of(event.id(), events)));
     }
 }
