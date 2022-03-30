@@ -4,6 +4,7 @@ import io.vavr.collection.List;
 import io.vavr.collection.Stream;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
+import org.springframework.http.ResponseEntity;
 
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
@@ -73,5 +74,9 @@ class TransactionService {
 //        accountService.saveEvents(Stream.concat(chargeAccountResult.get(), addMoneyResult.get()).toList());
 //
 //        return right(TransactionAddingResult.TRANSACTION_ADDED);
+    }
+
+    ResponseEntity<?> findTransactionsByAccountId(AccountHolderId accountHolderId) {
+        return null;
     }
 }
