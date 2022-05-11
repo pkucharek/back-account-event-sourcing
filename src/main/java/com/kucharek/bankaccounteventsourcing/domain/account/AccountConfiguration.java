@@ -8,6 +8,6 @@ class AccountConfiguration {
 
     @Bean
     TransactionService accountService() {
-        return new TransactionService();
+        return new TransactionServiceFunctionalImpl();
     }
 }
