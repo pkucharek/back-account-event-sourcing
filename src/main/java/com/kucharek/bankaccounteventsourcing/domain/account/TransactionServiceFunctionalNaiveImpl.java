@@ -7,17 +7,19 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.springframework.http.ResponseEntity;
 
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
-class TransactionServiceFunctionalImpl implements TransactionService {
+class TransactionServiceFunctionalNaiveImpl implements TransactionService {
 
     AccountService accountService;
 
     @Override
     public Either<AccountHolderCommandError, TransactionAddingResult>
-        performTransaction(NewTransactionDTO transaction) {
-
+    performTransaction(NewTransactionDTO transaction) {
         return accountService
             .findById(transaction.from())
             .map(fromAccountHolder -> accountService
@@ -35,28 +37,6 @@ class TransactionServiceFunctionalImpl implements TransactionService {
                 .getOrElse(() -> left(AccountHolderCommandError.FROM_NOT_FOUND)))
             .getOrElse(() -> left(AccountHolderCommandError.FROM_NOT_FOUND));
     }
-
-    private Either<AccountHolderCommandError, Tuple2<AccountHolder, AccountHolder>>
-        retrieveHolders(NewTransactionDTO transaction) {
-        return tupleIfBothPresentOrElse(
-            accountService.findById(transaction.from()),
-            accountService.findById(transaction.to()),
-            left(AccountHolderCommandError.FROM_NOT_FOUND)
-        );
-    }
-
-    private <T, E> Either<E, Tuple2<T, T>>
-        tupleIfBothPresentOrElse(
-            Option<T> first,
-            Option<T> second,
-            Either<E, Tuple2<T, T>> defaultLeft
-    ) {
-        if (first.isDefined() && second.isDefined()) {
-            return right(Tuple.of(first.get(), second.get()));
-        }
-        return defaultLeft;
-    }
-
 
     @Override
     public ResponseEntity<?> findTransactionsByAccountId(AccountHolderId accountHolderId) {
